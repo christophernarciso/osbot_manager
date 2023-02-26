@@ -3,23 +3,18 @@ package gui.dialogues.input_dialog;
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
 import bot_parameters.configuration.World;
-import bot_parameters.configuration.WorldType;
 import bot_parameters.proxy.Proxy;
 import bot_parameters.script.Script;
 import gui.dialogues.world_selector_dialog.WorldSelectorDialog;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public final class ConfigurationDialog extends InputDialog<Configuration> {
 
@@ -37,6 +32,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
     private final CheckBox noRandoms;
     private final CheckBox noInterface;
     private final CheckBox noRender;
+    private final CheckBox dismissRandoms;
+    private final CheckBox newMouse;
 
     private final WorldSelectorDialog worldSelectorDialog;
 
@@ -79,9 +76,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
 
         final Button worldSelectorButton = new Button("World selector");
         worldSelectorDialog = new WorldSelectorDialog();
-        worldSelectorButton.setOnAction(event -> {
-            worldSelectorDialog.showAndWait();
-        });
+        worldSelectorButton.setOnAction(event -> worldSelectorDialog.showAndWait());
         contentBox.getChildren().add(new FlowPane(10, 10, worldSelectorButton));
 
         memoryAllocation = new TextField();
@@ -118,10 +113,17 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         noRender = new CheckBox("No render");
         contentBox.getChildren().add(noRender);
 
+        dismissRandoms = new CheckBox("Dismiss Randoms");
+        contentBox.getChildren().add(dismissRandoms);
+
+        newMouse = new CheckBox("New Mouse");
+        contentBox.getChildren().add(newMouse);
+
+
         selectedScripts.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
                 List<Integer> selectedIndices = selectedScripts.getSelectionModel().getSelectedIndices();
-                for (int i = selectedIndices.size() - 1; i >= 0; i --) {
+                for (int i = selectedIndices.size() - 1; i >= 0; i--) {
                     selectedScripts.getItems().remove((int) selectedIndices.get(i));
                 }
                 okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
@@ -142,7 +144,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
 
     @Override
     public void setValues(final Configuration existingItem) {
-        if(existingItem == null) {
+        if (existingItem == null) {
             accountSelector.setValue(null);
             scriptSelector.setValue(null);
             proxySelector.setValue(null);
@@ -157,6 +159,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
             worldSelectorDialog.clearSelectedWorlds();
             noInterface.setSelected(false);
             noRender.setSelected(false);
+            dismissRandoms.setSelected(false);
+            newMouse.setSelected(false);
             return;
         }
         accountSelector.setValue(existingItem.getRunescapeAccount());
@@ -173,11 +177,13 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         worldSelectorDialog.setSelectedWorlds(existingItem.getWorlds());
         noInterface.setSelected(existingItem.isNoInterface());
         noRender.setSelected(existingItem.isNoRender());
+        dismissRandoms.setSelected(existingItem.isDismissRandoms());
+        newMouse.setSelected(existingItem.isNewMouse());
         okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
     }
 
     @Override
-    protected final Configuration onAdd() {
+    protected Configuration onAdd() {
         Configuration configuration = new Configuration(accountSelector.getSelectionModel().getSelectedItem(), selectedScripts.getItems());
         if (proxySelector.getSelectionModel().getSelectedItem() != null) {
             configuration.setProxy(proxySelector.getSelectionModel().getSelectedItem());
@@ -197,6 +203,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         configuration.setWorlds(new ArrayList<>(worldSelectorDialog.getSelectedWorlds()));
         configuration.setNoInterface(noInterface.isSelected());
         configuration.setNoRender(noRender.isSelected());
+        configuration.setDismissRandoms(dismissRandoms.isSelected());
+        configuration.setNewMouse(newMouse.isSelected());
 
         return configuration;
     }
@@ -226,6 +234,9 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         existingItem.setWorlds(new ArrayList<>(worldSelectorDialog.getSelectedWorlds()));
         existingItem.setNoInterface(noInterface.isSelected());
         existingItem.setNoRender(noRender.isSelected());
+        existingItem.setDismissRandoms(dismissRandoms.isSelected());
+        existingItem.setNewMouse(newMouse.isSelected());
+
         return existingItem;
     }
 }

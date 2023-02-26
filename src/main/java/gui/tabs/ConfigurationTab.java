@@ -25,13 +25,11 @@ import java.util.Optional;
 
 public class ConfigurationTab extends TableTab<Configuration> {
 
-    private final BotSettingsTab botSettingsTab;
     private final Button startButton, stopButton;
 
-    public ConfigurationTab(final ObservableList<RunescapeAccount> runescapeAccounts, final ObservableList<Script> scripts, final ObservableList<Proxy> proxies,  final BotSettingsTab botSettingsTab) {
+    public ConfigurationTab(final ObservableList<RunescapeAccount> runescapeAccounts, final ObservableList<Script> scripts, final ObservableList<Proxy> proxies) {
         super("Configurations", "No configurations found.", new ConfigurationDialog(runescapeAccounts, scripts, proxies));
 
-        this.botSettingsTab = botSettingsTab;
 
         toolBar.getChildren().add(new Separator(Orientation.VERTICAL));
 
@@ -90,7 +88,13 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, Boolean> noRenderCol = new TableColumn<>("No Render");
         noRenderCol.setCellValueFactory(new PropertyValueFactory<>("noRender"));
 
-        getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol, noRandomsCol, noInterfaceCol, noRenderCol);
+        TableColumn<Configuration, Boolean> dismissRandomsCol = new TableColumn<>("Dismiss Randoms");
+        dismissRandomsCol.setCellValueFactory(new PropertyValueFactory<>("dismissRandoms"));
+
+        TableColumn<Configuration, Boolean> newMouseCol = new TableColumn<>("New Mouse");
+        newMouseCol.setCellValueFactory(new PropertyValueFactory<>("newMouse"));
+
+        getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol, noRandomsCol, noInterfaceCol, noRenderCol, dismissRandomsCol, newMouseCol);
 
         getTableView().setRowFactory(param -> {
 

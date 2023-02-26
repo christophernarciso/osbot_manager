@@ -1,6 +1,5 @@
 package bot_parameters.configuration;
 
-import bot_parameters.account.OSBotAccount;
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.interfaces.BotParameter;
 import bot_parameters.interfaces.Copyable;
@@ -39,10 +38,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     private SimpleIntegerProperty debugPort = new SimpleIntegerProperty(-1);
     private SimpleBooleanProperty lowCpuMode = new SimpleBooleanProperty();
     private SimpleBooleanProperty lowResourceMode = new SimpleBooleanProperty();
+    private SimpleBooleanProperty dismissRandoms = new SimpleBooleanProperty();
     private SimpleBooleanProperty reflection = new SimpleBooleanProperty();
     private SimpleBooleanProperty noRandoms = new SimpleBooleanProperty();
     private SimpleBooleanProperty noInterface = new SimpleBooleanProperty();
     private SimpleBooleanProperty noRender = new SimpleBooleanProperty();
+    private SimpleBooleanProperty newMouse = new SimpleBooleanProperty();
     private SimpleListProperty<World> worlds = new SimpleListProperty<>(FXCollections.observableArrayList());
     private SimpleBooleanProperty isRunning = new SimpleBooleanProperty();
     private String logFileName;
@@ -60,113 +61,113 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return runescapeAccount.get();
     }
 
-    public final ObservableList<Script> getScripts() {
+    public ObservableList<Script> getScripts() {
         return scripts.get();
     }
 
-    public final Proxy getProxy() {
+    public Proxy getProxy() {
         return proxy.get();
     }
 
-    public final Integer getMemoryAllocation() {
+    public Integer getMemoryAllocation() {
         return memoryAllocation.get();
     }
 
-    public final boolean isCollectData() {
+    public boolean isCollectData() {
         return collectData.get();
     }
 
-    public final boolean isDebugMode() {
+    public boolean isDebugMode() {
         return debugMode.get();
     }
 
-    public final Integer getDebugPort() {
+    public Integer getDebugPort() {
         return debugPort.get();
     }
 
-    public final boolean isLowResourceMode() {
+    public boolean isLowResourceMode() {
         return lowResourceMode.get();
     }
 
-    public final boolean isLowCpuMode() {
+    public boolean isLowCpuMode() {
         return lowCpuMode.get();
     }
 
-    public final boolean isReflection() {
+    public boolean isReflection() {
         return reflection.get();
     }
 
-    public final boolean isNoRandoms() {
+    public boolean isNoRandoms() {
         return noRandoms.get();
     }
 
-    public final boolean isNoInterface() {
+    public boolean isNoInterface() {
         return noInterface.get();
     }
 
-    public final boolean isNoRender() {
+    public boolean isNoRender() {
         return noRender.get();
     }
 
-    public final ObservableList<World> getWorlds() { return worlds.get(); }
+    public ObservableList<World> getWorlds() { return worlds.get(); }
 
-    public final void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
+    public void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
         this.runescapeAccount.set(runescapeAccount);
     }
 
-    public final void setScripts(final ObservableList<Script> scripts) {
+    public void setScripts(final ObservableList<Script> scripts) {
         this.scripts.set(scripts);
     }
 
-    public final void setProxy(final Proxy proxy) {
+    public void setProxy(final Proxy proxy) {
         this.proxy.set(proxy);
     }
 
-    public final void setMemoryAllocation(final Integer memoryAllocation) {
+    public void setMemoryAllocation(final Integer memoryAllocation) {
         this.memoryAllocation.set(memoryAllocation);
     }
 
-    public final void setCollectData(final boolean collectData) {
+    public void setCollectData(final boolean collectData) {
         this.collectData.set(collectData);
     }
 
-    public final void setDebugMode(final boolean debugMode) {
+    public void setDebugMode(final boolean debugMode) {
         this.debugMode.set(debugMode);
     }
 
-    public final void setDebugPort(final Integer debugPort) {
+    public void setDebugPort(final Integer debugPort) {
         this.debugPort.set(debugPort);
     }
 
-    public final void setLowCpuMode(final boolean lowCpuMode) {
+    public void setLowCpuMode(final boolean lowCpuMode) {
         this.lowCpuMode.set(lowCpuMode);
     }
 
-    public final void setLowResourceMode(final boolean lowResourceMode) {
+    public void setLowResourceMode(final boolean lowResourceMode) {
         this.lowResourceMode.set(lowResourceMode);
     }
 
-    public final void setReflection(final boolean reflection) {
+    public void setReflection(final boolean reflection) {
         this.reflection.set(reflection);
     }
 
-    public final void setNoRandoms(final boolean noRandoms) {
+    public void setNoRandoms(final boolean noRandoms) {
         this.noRandoms.set(noRandoms);
     }
 
-    public final void setNoInterface(final boolean noInterface) {
+    public void setNoInterface(final boolean noInterface) {
         this.noInterface.set(noInterface);
     }
 
-    public final void setNoRender(final boolean noRender) {
+    public void setNoRender(final boolean noRender) {
         this.noRender.set(noRender);
     }
 
-    public final void setWorlds(final List<World> worlds) {
+    public void setWorlds(final List<World> worlds) {
         this.worlds.setAll(worlds);
     }
 
-    public final boolean isRunning() {
+    public boolean isRunning() {
         return isRunning.get();
     }
 
@@ -174,12 +175,36 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         this.isRunning.set(isRunning);
     }
 
-    public final void addRunListener(final ChangeListener<Boolean> listener) {
+    public void addRunListener(final ChangeListener<Boolean> listener) {
         isRunning.addListener(listener);
     }
 
     public String getLogFileName() {
         return logFileName;
+    }
+
+    public boolean isDismissRandoms() {
+        return dismissRandoms.get();
+    }
+
+    public SimpleBooleanProperty dismissRandomsProperty() {
+        return dismissRandoms;
+    }
+
+    public void setDismissRandoms(boolean dismissRandoms) {
+        this.dismissRandoms.set(dismissRandoms);
+    }
+
+    public boolean isNewMouse() {
+        return newMouse.get();
+    }
+
+    public SimpleBooleanProperty newMouseProperty() {
+        return newMouse;
+    }
+
+    public void setNewMouse(boolean newMouse) {
+        this.newMouse.set(newMouse);
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
@@ -197,6 +222,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeBoolean(isNoRandoms());
         stream.writeBoolean(isNoInterface());
         stream.writeBoolean(isNoRender());
+        stream.writeObject(isDismissRandoms());
+        stream.writeObject(isNewMouse());
         stream.writeObject(logFileName);
     }
 
@@ -251,6 +278,18 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             noRender = new SimpleBooleanProperty();
         }
         try {
+            dismissRandoms = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new dismissrandoms option, skipping");
+            dismissRandoms = new SimpleBooleanProperty();
+        }
+        try {
+            newMouse = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new newmouse option, skipping");
+            newMouse = new SimpleBooleanProperty();
+        }
+        try {
             logFileName = (String) stream.readObject();
             File logFile = new File(logFileName);
             if (!logFile.exists()) {
@@ -263,7 +302,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     }
 
     @Override
-    public final String[] toParameter() {
+    public String[] toParameter() {
 
         List<String> parameter = new ArrayList<>();
 
@@ -312,6 +351,13 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             Collections.addAll(parameter, "-allow",  String.join(",", allowParams));
         }
 
+        if (dismissRandoms.get()) {
+            parameter.add("-dismissrandoms");
+        }
+        if (newMouse.get()) {
+            parameter.add("-newmouse");
+        }
+
         World world = worlds.get(new Random().nextInt(worlds.size()));
         Collections.addAll(parameter, world.toParameter());
 
@@ -345,6 +391,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setNoRandoms(isNoRandoms());
         configurationCopy.setNoRender(isNoRender());
         configurationCopy.setNoInterface(isNoInterface());
+        configurationCopy.setDismissRandoms(isDismissRandoms());
+        configurationCopy.setNewMouse(isDismissRandoms());
         return configurationCopy;
     }
 
@@ -358,12 +406,6 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
         if (!logFile.exists() && !logFile.createNewFile()) {
             throw new IllegalStateException("Could not create log file");
-        }
-
-        OSBotAccount osBotAccount = OSBotAccount.getInstance();
-
-        if (osBotAccount.getUsername().trim().isEmpty() || osBotAccount.getPassword().isEmpty()) {
-            Platform.runLater(() -> new ExceptionDialog(new Exception("OSBot account username or password is empty!")).show());
         }
 
         Thread runThread = new Thread(() -> {
@@ -444,7 +486,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
             Collections.addAll(command, "java", "-jar");
             Collections.addAll(command, Paths.get(Settings.OSBOT_CLIENT_DIR, OSBotClient.getLatestLocalVersion().get()).toString());
-            Collections.addAll(command, OSBotAccount.getInstance().toParameter());
+            Collections.addAll(command, "-autologin");
             Collections.addAll(command, this.toParameter());
             Collections.addAll(command, script.toParameter());
 

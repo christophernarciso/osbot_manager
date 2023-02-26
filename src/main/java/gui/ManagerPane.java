@@ -1,11 +1,9 @@
 package gui;
 
-import bot_parameters.account.OSBotAccount;
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
 import bot_parameters.proxy.Proxy;
 import bot_parameters.script.Script;
-import file_manager.PropertiesFileManager;
 import file_manager.SettingsFileManager;
 import gui.tabs.*;
 import javafx.geometry.Insets;
@@ -60,16 +58,14 @@ public class ManagerPane extends BorderPane {
 
         setTop(topToolBar);
 
-        BotSettingsTab botSettingsTab = new BotSettingsTab();
-
         TableTab<RunescapeAccount> runescapeAccountTab = new RunescapeAccountTab();
         TableTab<Script> scriptTab = new ScriptTab();
         TableTab<Proxy> proxyTab = new ProxyTab();
-        TableTab<Configuration> runTab = new ConfigurationTab(runescapeAccountTab.getTableView().getItems(), scriptTab.getTableView().getItems(), proxyTab.getTableView().getItems(), botSettingsTab);
+        TableTab<Configuration> runTab = new ConfigurationTab(runescapeAccountTab.getTableView().getItems(), scriptTab.getTableView().getItems(), proxyTab.getTableView().getItems());
 
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.getTabs().addAll(runTab, scriptTab, runescapeAccountTab, proxyTab, botSettingsTab);
+        tabPane.getTabs().addAll(runTab, scriptTab, runescapeAccountTab, proxyTab);
         setCenter(tabPane);
 
         saveButton.setOnAction(event -> {
@@ -79,10 +75,6 @@ public class ManagerPane extends BorderPane {
             objects.addAll(scriptTab.getTableView().getItems());
             objects.addAll(runTab.getTableView().getItems());
             SettingsFileManager.saveSettings(objects);
-            PropertiesFileManager.setOSBotProperties(
-                    OSBotAccount.getInstance().getUsername(),
-                    OSBotAccount.getInstance().getPassword()
-            );
         });
 
         loadButton.setOnAction(event -> {
@@ -100,15 +92,6 @@ public class ManagerPane extends BorderPane {
                 } else if (object instanceof Configuration) {
                     runTab.getTableView().getItems().add((Configuration) object);
                 }
-            }
-        });
-
-        PropertiesFileManager.getOSBotProperties().ifPresent(properties -> {
-            if(properties.containsKey("username")) {
-                botSettingsTab.setOsbotUsername(properties.getProperty("username"));
-            }
-            if(properties.containsKey("password")) {
-                botSettingsTab.setOsbotPassword(properties.getProperty("password"));
             }
         });
     }
