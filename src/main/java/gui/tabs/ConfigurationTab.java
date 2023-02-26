@@ -217,7 +217,7 @@ public class ConfigurationTab extends TableTab<Configuration> {
             for (final Configuration configuration : configurations) {
                 try {
                     configuration.run();
-                    Thread.sleep(delay * 1000);
+                    Thread.sleep(delay * 1_000L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -238,9 +238,6 @@ public class ConfigurationTab extends TableTab<Configuration> {
 
         Optional<String> delayText = delayDialog.showAndWait();
 
-        if (delayText.isPresent()) {
-            return Integer.parseInt(delayText.get());
-        }
-        return 0;
+        return delayText.map(Integer::parseInt).orElse(0);
     }
 }
