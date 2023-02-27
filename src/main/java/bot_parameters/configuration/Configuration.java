@@ -187,20 +187,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return dismissRandoms.get();
     }
 
-    public SimpleBooleanProperty dismissRandomsProperty() {
-        return dismissRandoms;
-    }
-
     public void setDismissRandoms(boolean dismissRandoms) {
         this.dismissRandoms.set(dismissRandoms);
     }
 
     public boolean isNewMouse() {
         return newMouse.get();
-    }
-
-    public SimpleBooleanProperty newMouseProperty() {
-        return newMouse;
     }
 
     public void setNewMouse(boolean newMouse) {
@@ -222,8 +214,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeBoolean(isNoRandoms());
         stream.writeBoolean(isNoInterface());
         stream.writeBoolean(isNoRender());
-        stream.writeObject(isDismissRandoms());
-        stream.writeObject(isNewMouse());
+        stream.writeBoolean(isDismissRandoms());
+        stream.writeBoolean(isNewMouse());
         stream.writeObject(logFileName);
     }
 
