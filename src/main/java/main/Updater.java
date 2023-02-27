@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class Updater {
 
-    private static final String LATEST_RELEASE_URL = "https://api.github.com/repos/Explv/osbot_manager/releases/latest";
+    private static final String LATEST_RELEASE_URL = "https://api.github.com/repos/christophernarciso/osbot_manager/releases/latest";
 
     private static final JSONObject latestReleaseJSON;
 
