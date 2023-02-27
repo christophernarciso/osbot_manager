@@ -384,7 +384,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setNoRender(isNoRender());
         configurationCopy.setNoInterface(isNoInterface());
         configurationCopy.setDismissRandoms(isDismissRandoms());
-        configurationCopy.setNewMouse(isDismissRandoms());
+        configurationCopy.setNewMouse(isNewMouse());
         return configurationCopy;
     }
 
