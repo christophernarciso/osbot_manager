@@ -44,6 +44,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     private SimpleBooleanProperty noInterface = new SimpleBooleanProperty();
     private SimpleBooleanProperty noRender = new SimpleBooleanProperty();
     private SimpleBooleanProperty newMouse = new SimpleBooleanProperty();
+    private SimpleBooleanProperty enableBreaks = new SimpleBooleanProperty();
+    private SimpleBooleanProperty stopAfterBreak = new SimpleBooleanProperty();
     private SimpleListProperty<World> worlds = new SimpleListProperty<>(FXCollections.observableArrayList());
     private SimpleBooleanProperty isRunning = new SimpleBooleanProperty();
     private String logFileName;
@@ -109,7 +111,9 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return noRender.get();
     }
 
-    public ObservableList<World> getWorlds() { return worlds.get(); }
+    public ObservableList<World> getWorlds() {
+        return worlds.get();
+    }
 
     public void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
         this.runescapeAccount.set(runescapeAccount);
@@ -199,6 +203,22 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         this.newMouse.set(newMouse);
     }
 
+    public boolean isEnableBreaks() {
+        return enableBreaks.get();
+    }
+
+    public void setEnableBreaks(boolean enableBreaks) {
+        this.enableBreaks.set(enableBreaks);
+    }
+
+    public boolean isStopAfterBreak() {
+        return stopAfterBreak.get();
+    }
+
+    public void setStopAfterBreak(boolean stopAfterBreak) {
+        this.stopAfterBreak.set(stopAfterBreak);
+    }
+
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(getRunescapeAccount());
         stream.writeObject(new ArrayList<>(getScripts()));
@@ -216,6 +236,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeBoolean(isNoRender());
         stream.writeBoolean(isDismissRandoms());
         stream.writeBoolean(isNewMouse());
+        stream.writeBoolean(isEnableBreaks());
+        stream.writeBoolean(isStopAfterBreak());
         stream.writeObject(logFileName);
     }
 
@@ -282,6 +304,19 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             newMouse = new SimpleBooleanProperty();
         }
         try {
+            enableBreaks = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new enablebreaks option, skipping");
+            enableBreaks = new SimpleBooleanProperty();
+        }
+        try {
+            stopAfterBreak = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new stopAfterBreak option, skipping");
+            stopAfterBreak = new SimpleBooleanProperty();
+        }
+
+        try {
             logFileName = (String) stream.readObject();
             File logFile = new File(logFileName);
             if (!logFile.exists()) {
@@ -302,6 +337,10 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
         if (proxy.get() != null) {
             Collections.addAll(parameter, proxy.get().toParameter());
+        }
+
+        if (enableBreaks.get()) {
+            Collections.addAll(parameter, "-breaksettings", String.join(":", String.valueOf(enableBreaks.get()), String.valueOf(stopAfterBreak.get())));
         }
 
         if (memoryAllocation.get() != -1) {
@@ -340,7 +379,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         }
 
         if (!allowParams.isEmpty()) {
-            Collections.addAll(parameter, "-allow",  String.join(",", allowParams));
+            Collections.addAll(parameter, "-allow", String.join(",", allowParams));
         }
 
         if (dismissRandoms.get()) {
@@ -385,6 +424,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setNoInterface(isNoInterface());
         configurationCopy.setDismissRandoms(isDismissRandoms());
         configurationCopy.setNewMouse(isNewMouse());
+        configurationCopy.setEnableBreaks(isEnableBreaks());
+        configurationCopy.setStopAfterBreak(isStopAfterBreak());
         return configurationCopy;
     }
 

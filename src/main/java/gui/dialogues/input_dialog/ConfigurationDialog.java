@@ -34,6 +34,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
     private final CheckBox noRender;
     private final CheckBox dismissRandoms;
     private final CheckBox newMouse;
+    private final CheckBox enableBreaks;
+    private final CheckBox stopAfterBreak;
 
     private final WorldSelectorDialog worldSelectorDialog;
 
@@ -78,6 +80,10 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         worldSelectorDialog = new WorldSelectorDialog();
         worldSelectorButton.setOnAction(event -> worldSelectorDialog.showAndWait());
         contentBox.getChildren().add(new FlowPane(10, 10, worldSelectorButton));
+
+        enableBreaks = new CheckBox("Enable Break Profile");
+        stopAfterBreak = new CheckBox("Stop After Break");
+        contentBox.getChildren().add(new FlowPane(10, 10, new Label("Break Settings:"), enableBreaks, stopAfterBreak));
 
         memoryAllocation = new TextField();
         memoryAllocation.setPromptText("(Optional) Memory Allocation");
@@ -161,6 +167,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
             noRender.setSelected(false);
             dismissRandoms.setSelected(false);
             newMouse.setSelected(false);
+            enableBreaks.setSelected(false);
+            stopAfterBreak.setSelected(false);
             return;
         }
         accountSelector.setValue(existingItem.getRunescapeAccount());
@@ -179,6 +187,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         noRender.setSelected(existingItem.isNoRender());
         dismissRandoms.setSelected(existingItem.isDismissRandoms());
         newMouse.setSelected(existingItem.isNewMouse());
+        enableBreaks.setSelected(existingItem.isEnableBreaks());
+        stopAfterBreak.setSelected(existingItem.isStopAfterBreak());
         okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
     }
 
@@ -205,6 +215,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         configuration.setNoRender(noRender.isSelected());
         configuration.setDismissRandoms(dismissRandoms.isSelected());
         configuration.setNewMouse(newMouse.isSelected());
+        configuration.setEnableBreaks(enableBreaks.isSelected());
+        configuration.setStopAfterBreak(stopAfterBreak.isSelected());
 
         return configuration;
     }
@@ -236,6 +248,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         existingItem.setNoRender(noRender.isSelected());
         existingItem.setDismissRandoms(dismissRandoms.isSelected());
         existingItem.setNewMouse(newMouse.isSelected());
+        existingItem.setEnableBreaks(enableBreaks.isSelected());
+        existingItem.setStopAfterBreak(stopAfterBreak.isSelected());
 
         return existingItem;
     }
