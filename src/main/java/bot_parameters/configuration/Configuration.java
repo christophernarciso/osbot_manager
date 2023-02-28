@@ -46,6 +46,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     private SimpleBooleanProperty newMouse = new SimpleBooleanProperty();
     private SimpleBooleanProperty enableBreaks = new SimpleBooleanProperty();
     private SimpleBooleanProperty stopAfterBreak = new SimpleBooleanProperty();
+    private SimpleBooleanProperty mirrorMode = new SimpleBooleanProperty();
+    private SimpleBooleanProperty launchGame = new SimpleBooleanProperty();
     private SimpleListProperty<World> worlds = new SimpleListProperty<>(FXCollections.observableArrayList());
     private SimpleBooleanProperty isRunning = new SimpleBooleanProperty();
     private String logFileName;
@@ -57,166 +59,6 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         this.scripts = new SimpleListProperty<>(scripts);
         this.proxy = new SimpleObjectProperty<>();
         logFileName = Paths.get(Settings.LOGS_DIR, UUID.randomUUID().toString()).toString();
-    }
-
-    public RunescapeAccount getRunescapeAccount() {
-        return runescapeAccount.get();
-    }
-
-    public ObservableList<Script> getScripts() {
-        return scripts.get();
-    }
-
-    public Proxy getProxy() {
-        return proxy.get();
-    }
-
-    public Integer getMemoryAllocation() {
-        return memoryAllocation.get();
-    }
-
-    public boolean isCollectData() {
-        return collectData.get();
-    }
-
-    public boolean isDebugMode() {
-        return debugMode.get();
-    }
-
-    public Integer getDebugPort() {
-        return debugPort.get();
-    }
-
-    public boolean isLowResourceMode() {
-        return lowResourceMode.get();
-    }
-
-    public boolean isLowCpuMode() {
-        return lowCpuMode.get();
-    }
-
-    public boolean isReflection() {
-        return reflection.get();
-    }
-
-    public boolean isNoRandoms() {
-        return noRandoms.get();
-    }
-
-    public boolean isNoInterface() {
-        return noInterface.get();
-    }
-
-    public boolean isNoRender() {
-        return noRender.get();
-    }
-
-    public ObservableList<World> getWorlds() {
-        return worlds.get();
-    }
-
-    public void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
-        this.runescapeAccount.set(runescapeAccount);
-    }
-
-    public void setScripts(final ObservableList<Script> scripts) {
-        this.scripts.set(scripts);
-    }
-
-    public void setProxy(final Proxy proxy) {
-        this.proxy.set(proxy);
-    }
-
-    public void setMemoryAllocation(final Integer memoryAllocation) {
-        this.memoryAllocation.set(memoryAllocation);
-    }
-
-    public void setCollectData(final boolean collectData) {
-        this.collectData.set(collectData);
-    }
-
-    public void setDebugMode(final boolean debugMode) {
-        this.debugMode.set(debugMode);
-    }
-
-    public void setDebugPort(final Integer debugPort) {
-        this.debugPort.set(debugPort);
-    }
-
-    public void setLowCpuMode(final boolean lowCpuMode) {
-        this.lowCpuMode.set(lowCpuMode);
-    }
-
-    public void setLowResourceMode(final boolean lowResourceMode) {
-        this.lowResourceMode.set(lowResourceMode);
-    }
-
-    public void setReflection(final boolean reflection) {
-        this.reflection.set(reflection);
-    }
-
-    public void setNoRandoms(final boolean noRandoms) {
-        this.noRandoms.set(noRandoms);
-    }
-
-    public void setNoInterface(final boolean noInterface) {
-        this.noInterface.set(noInterface);
-    }
-
-    public void setNoRender(final boolean noRender) {
-        this.noRender.set(noRender);
-    }
-
-    public void setWorlds(final List<World> worlds) {
-        this.worlds.setAll(worlds);
-    }
-
-    public boolean isRunning() {
-        return isRunning.get();
-    }
-
-    public void setRunning(final boolean isRunning) {
-        this.isRunning.set(isRunning);
-    }
-
-    public void addRunListener(final ChangeListener<Boolean> listener) {
-        isRunning.addListener(listener);
-    }
-
-    public String getLogFileName() {
-        return logFileName;
-    }
-
-    public boolean isDismissRandoms() {
-        return dismissRandoms.get();
-    }
-
-    public void setDismissRandoms(boolean dismissRandoms) {
-        this.dismissRandoms.set(dismissRandoms);
-    }
-
-    public boolean isNewMouse() {
-        return newMouse.get();
-    }
-
-    public void setNewMouse(boolean newMouse) {
-        this.newMouse.set(newMouse);
-    }
-
-    public boolean isEnableBreaks() {
-        return enableBreaks.get();
-    }
-
-    public void setEnableBreaks(boolean enableBreaks) {
-        this.enableBreaks.set(enableBreaks);
-    }
-
-    public boolean isStopAfterBreak() {
-        return stopAfterBreak.get();
-    }
-
-    public void setStopAfterBreak(boolean stopAfterBreak) {
-        this.stopAfterBreak.set(stopAfterBreak);
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
@@ -238,6 +80,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeBoolean(isNewMouse());
         stream.writeBoolean(isEnableBreaks());
         stream.writeBoolean(isStopAfterBreak());
+        stream.writeBoolean(isMirrorMode());
+        stream.writeBoolean(isLaunchGame());
         stream.writeObject(logFileName);
     }
 
@@ -315,6 +159,18 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             System.out.println("Config does not contain new stopAfterBreak option, skipping");
             stopAfterBreak = new SimpleBooleanProperty();
         }
+        try {
+            mirrorMode = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new mirrormode option, skipping");
+            mirrorMode = new SimpleBooleanProperty();
+        }
+        try {
+            launchGame = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new launchgame option, skipping");
+            launchGame = new SimpleBooleanProperty();
+        }
 
         try {
             logFileName = (String) stream.readObject();
@@ -388,6 +244,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         if (newMouse.get()) {
             parameter.add("-newmouse");
         }
+        if (mirrorMode.get()) {
+            parameter.add("-mirror");
+        }
+        if (launchGame.get()) {
+            parameter.add("-launchgame");
+        }
 
         World world = worlds.get(new Random().nextInt(worlds.size()));
         Collections.addAll(parameter, world.toParameter());
@@ -426,6 +288,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setNewMouse(isNewMouse());
         configurationCopy.setEnableBreaks(isEnableBreaks());
         configurationCopy.setStopAfterBreak(isStopAfterBreak());
+        configurationCopy.setMirrorMode(isMirrorMode());
+        configurationCopy.setLaunchGame(isLaunchGame());
         return configurationCopy;
     }
 
@@ -601,5 +465,181 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public RunescapeAccount getRunescapeAccount() {
+        return runescapeAccount.get();
+    }
+
+    public ObservableList<Script> getScripts() {
+        return scripts.get();
+    }
+
+    public Proxy getProxy() {
+        return proxy.get();
+    }
+
+    public Integer getMemoryAllocation() {
+        return memoryAllocation.get();
+    }
+
+    public boolean isCollectData() {
+        return collectData.get();
+    }
+
+    public boolean isDebugMode() {
+        return debugMode.get();
+    }
+
+    public Integer getDebugPort() {
+        return debugPort.get();
+    }
+
+    public boolean isLowResourceMode() {
+        return lowResourceMode.get();
+    }
+
+    public boolean isLowCpuMode() {
+        return lowCpuMode.get();
+    }
+
+    public boolean isReflection() {
+        return reflection.get();
+    }
+
+    public boolean isNoRandoms() {
+        return noRandoms.get();
+    }
+
+    public boolean isNoInterface() {
+        return noInterface.get();
+    }
+
+    public boolean isNoRender() {
+        return noRender.get();
+    }
+
+    public ObservableList<World> getWorlds() {
+        return worlds.get();
+    }
+
+    public void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
+        this.runescapeAccount.set(runescapeAccount);
+    }
+
+    public void setScripts(final ObservableList<Script> scripts) {
+        this.scripts.set(scripts);
+    }
+
+    public void setProxy(final Proxy proxy) {
+        this.proxy.set(proxy);
+    }
+
+    public void setMemoryAllocation(final Integer memoryAllocation) {
+        this.memoryAllocation.set(memoryAllocation);
+    }
+
+    public void setCollectData(final boolean collectData) {
+        this.collectData.set(collectData);
+    }
+
+    public void setDebugMode(final boolean debugMode) {
+        this.debugMode.set(debugMode);
+    }
+
+    public void setDebugPort(final Integer debugPort) {
+        this.debugPort.set(debugPort);
+    }
+
+    public void setLowCpuMode(final boolean lowCpuMode) {
+        this.lowCpuMode.set(lowCpuMode);
+    }
+
+    public void setLowResourceMode(final boolean lowResourceMode) {
+        this.lowResourceMode.set(lowResourceMode);
+    }
+
+    public void setReflection(final boolean reflection) {
+        this.reflection.set(reflection);
+    }
+
+    public void setNoRandoms(final boolean noRandoms) {
+        this.noRandoms.set(noRandoms);
+    }
+
+    public void setNoInterface(final boolean noInterface) {
+        this.noInterface.set(noInterface);
+    }
+
+    public void setNoRender(final boolean noRender) {
+        this.noRender.set(noRender);
+    }
+
+    public void setWorlds(final List<World> worlds) {
+        this.worlds.setAll(worlds);
+    }
+
+    public boolean isRunning() {
+        return isRunning.get();
+    }
+
+    public void setRunning(final boolean isRunning) {
+        this.isRunning.set(isRunning);
+    }
+
+    public void addRunListener(final ChangeListener<Boolean> listener) {
+        isRunning.addListener(listener);
+    }
+
+    public String getLogFileName() {
+        return logFileName;
+    }
+
+    public boolean isDismissRandoms() {
+        return dismissRandoms.get();
+    }
+
+    public void setDismissRandoms(boolean dismissRandoms) {
+        this.dismissRandoms.set(dismissRandoms);
+    }
+
+    public boolean isNewMouse() {
+        return newMouse.get();
+    }
+
+    public void setNewMouse(boolean newMouse) {
+        this.newMouse.set(newMouse);
+    }
+
+    public boolean isEnableBreaks() {
+        return enableBreaks.get();
+    }
+
+    public void setEnableBreaks(boolean enableBreaks) {
+        this.enableBreaks.set(enableBreaks);
+    }
+
+    public boolean isStopAfterBreak() {
+        return stopAfterBreak.get();
+    }
+
+    public void setStopAfterBreak(boolean stopAfterBreak) {
+        this.stopAfterBreak.set(stopAfterBreak);
+    }
+
+    public boolean isMirrorMode() {
+        return mirrorMode.get();
+    }
+
+    public void setMirrorMode(boolean mirrorMode) {
+        this.mirrorMode.set(mirrorMode);
+    }
+
+    public boolean isLaunchGame() {
+        return launchGame.get();
+    }
+
+    public void setLaunchGame(boolean launchGame) {
+        this.launchGame.set(launchGame);
     }
 }

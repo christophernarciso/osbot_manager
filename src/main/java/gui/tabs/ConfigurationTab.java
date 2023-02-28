@@ -58,6 +58,12 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, Proxy> proxyCol = new TableColumn<>("Proxy");
         proxyCol.setCellValueFactory(new PropertyValueFactory<>("proxy"));
 
+        TableColumn<Configuration, Boolean> mirrorCol = new TableColumn<>("Mirror");
+        mirrorCol.setCellValueFactory(new PropertyValueFactory<>("mirrorMode"));
+
+        TableColumn<Configuration, Boolean> launchGameCol = new TableColumn<>("Launch Game");
+        launchGameCol.setCellValueFactory(new PropertyValueFactory<>("launchGame"));
+
         TableColumn<Configuration, Boolean> breakCol = new TableColumn<>("Enable Break");
         breakCol.setCellValueFactory(new PropertyValueFactory<>("enableBreaks"));
 
@@ -100,7 +106,9 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, Boolean> newMouseCol = new TableColumn<>("New Mouse");
         newMouseCol.setCellValueFactory(new PropertyValueFactory<>("newMouse"));
 
-        getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, breakCol, stopBreakCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol, noRandomsCol, noInterfaceCol, noRenderCol, dismissRandomsCol, newMouseCol);
+        getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, mirrorCol, launchGameCol, breakCol,
+                stopBreakCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol,
+                noRandomsCol, noInterfaceCol, noRenderCol, dismissRandomsCol, newMouseCol);
 
         getTableView().setRowFactory(param -> {
 

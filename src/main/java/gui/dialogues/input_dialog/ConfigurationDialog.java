@@ -36,6 +36,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
     private final CheckBox newMouse;
     private final CheckBox enableBreaks;
     private final CheckBox stopAfterBreak;
+    private final CheckBox mirrorMode;
+    private final CheckBox launchGame;
 
     private final WorldSelectorDialog worldSelectorDialog;
 
@@ -125,6 +127,10 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         newMouse = new CheckBox("New Mouse");
         contentBox.getChildren().add(newMouse);
 
+        mirrorMode = new CheckBox("Mirror Mode");
+        launchGame = new CheckBox("Launch Game");
+        contentBox.getChildren().add(new FlowPane(10, 10, mirrorMode, launchGame));
+
 
         selectedScripts.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
@@ -169,6 +175,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
             newMouse.setSelected(false);
             enableBreaks.setSelected(false);
             stopAfterBreak.setSelected(false);
+            mirrorMode.setSelected(false);
+            launchGame.setSelected(false);
             return;
         }
         accountSelector.setValue(existingItem.getRunescapeAccount());
@@ -189,6 +197,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         newMouse.setSelected(existingItem.isNewMouse());
         enableBreaks.setSelected(existingItem.isEnableBreaks());
         stopAfterBreak.setSelected(existingItem.isStopAfterBreak());
+        mirrorMode.setSelected(existingItem.isMirrorMode());
+        launchGame.setSelected(existingItem.isLaunchGame());
         okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
     }
 
@@ -217,6 +227,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         configuration.setNewMouse(newMouse.isSelected());
         configuration.setEnableBreaks(enableBreaks.isSelected());
         configuration.setStopAfterBreak(stopAfterBreak.isSelected());
+        configuration.setMirrorMode(mirrorMode.isSelected());
+        configuration.setLaunchGame(launchGame.isSelected());
 
         return configuration;
     }
@@ -250,6 +262,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         existingItem.setNewMouse(newMouse.isSelected());
         existingItem.setEnableBreaks(enableBreaks.isSelected());
         existingItem.setStopAfterBreak(stopAfterBreak.isSelected());
+        existingItem.setMirrorMode(mirrorMode.isSelected());
+        existingItem.setLaunchGame(launchGame.isSelected());
 
         return existingItem;
     }
