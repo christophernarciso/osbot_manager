@@ -21,6 +21,9 @@ public class ProxyTab extends TableTab<Proxy> {
     public ProxyTab() {
         super("Proxies", "No proxies found.", new ProxyDialog());
 
+        TableColumn<Proxy, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("niceName"));
+
         TableColumn<Proxy, String> ipCol = new TableColumn<>("IP Address");
         ipCol.setCellValueFactory(new PropertyValueFactory<>("ipAddress"));
 
@@ -34,7 +37,7 @@ public class ProxyTab extends TableTab<Proxy> {
         passwordCol.setCellFactory(param -> new PasswordFieldCell());
         passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
 
-        getTableView().getColumns().addAll(ipCol, portCol, usernameCol, passwordCol);
+        getTableView().getColumns().addAll(nameCol, ipCol, portCol, usernameCol, passwordCol);
 
         toolBar.getChildren().add(new Separator(Orientation.VERTICAL));
 

@@ -4,6 +4,7 @@ import bot_parameters.interfaces.BotParameter;
 import bot_parameters.interfaces.Copyable;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +16,7 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
     private static final long serialVersionUID = -3697946363287646016L;
 
     private SimpleStringProperty author;
+    public SimpleStringProperty nickname;
     private SimpleStringProperty scriptIdentifier;
     private SimpleStringProperty parameters;
     private SimpleBooleanProperty isLocal;
@@ -25,6 +27,14 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         this.isLocal = new SimpleBooleanProperty(isLocal);
     }
 
+  public Script(final String scriptIdentifier, final String parameters, final boolean isLocal, final String nickname) {
+    this.scriptIdentifier = new SimpleStringProperty(scriptIdentifier);
+    this.parameters = new SimpleStringProperty(parameters);
+    this.isLocal = new SimpleBooleanProperty(isLocal);
+    this.nickname = new SimpleStringProperty(nickname);
+  }
+
+    public final String getNickname() { return nickname.get(); }
     public final String getScriptIdentifier() {
         return scriptIdentifier.get();
     }
@@ -33,6 +43,9 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         return parameters.get();
     }
 
+    public final void setNickname(final String nickname) {
+      this.nickname.set(nickname);
+    }
     public final void setScriptIdentifier(final String scriptIdentifier) {
         this.scriptIdentifier.set(scriptIdentifier);
     }
@@ -58,21 +71,26 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         stream.writeObject(scriptIdentifier.get());
         stream.writeObject(parameters.get());
         stream.writeBoolean(isLocal.get());
+        stream.writeObject(nickname.get());
     }
 
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         scriptIdentifier = new SimpleStringProperty((String) stream.readObject());
         parameters = new SimpleStringProperty((String) stream.readObject());
         isLocal = new SimpleBooleanProperty(stream.readBoolean());
+        nickname = new SimpleStringProperty((String) stream.readObject());
     }
 
     @Override
-    public final String toString() {
-        return scriptIdentifier.get();
+    public String toString() {
+      if(nickname != null && nickname.get().isEmpty() == false) {
+        return nickname.get();
+      }
+      return scriptIdentifier.get();
     }
 
     @Override
     public Script createCopy() {
-        return new Script(getScriptIdentifier(), getParameters(), isLocal());
+        return new Script(getScriptIdentifier(), getParameters(), isLocal(), getNickname());
     }
 }

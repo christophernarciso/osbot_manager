@@ -19,6 +19,12 @@ public class SecuredProxy extends Proxy {
         this.password = password;
     }
 
+  public SecuredProxy(final String ip, final int port, final String username, final String password, final String niceName) {
+    super(ip, port, niceName);
+    this.username = username;
+    this.password = password;
+  }
+
     public final String getUsername() {
         return username;
     }

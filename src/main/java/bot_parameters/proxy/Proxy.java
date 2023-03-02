@@ -14,13 +14,21 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
 
     private static final long serialVersionUID = -6367454010350132779L;
 
+    SimpleStringProperty nickname;
     SimpleStringProperty ipAddress;
     SimpleIntegerProperty port;
 
     public Proxy(final String ipAddress, final int port) {
-        this.ipAddress = new SimpleStringProperty(ipAddress);
-        this.port = new SimpleIntegerProperty(port);
+      this.ipAddress = new SimpleStringProperty(ipAddress);
+      this.port = new SimpleIntegerProperty(port);
     }
+    public Proxy(final String ipAddress, final int port, final String niceName) {
+      this.nickname = new SimpleStringProperty(niceName);
+      this.ipAddress = new SimpleStringProperty(ipAddress);
+      this.port = new SimpleIntegerProperty(port);
+    }
+
+    public final String getNickname() { return nickname.get(); }
 
     public final String getIpAddress() {
         return ipAddress.get();
@@ -29,6 +37,8 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
     public final int getPort() {
         return port.get();
     }
+
+    public final void setNickname(final String nickname) { this.nickname.set(nickname); }
 
     public final void setIP(final String ip) {
         this.ipAddress.set(ip);
@@ -53,11 +63,14 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
 
     @Override
     public String toString() {
-        return ipAddress.get() + ":" + port.get();
+      if(nickname.get() != null && nickname.get().isEmpty() == false) {
+        return nickname.get();
+      }
+      return ipAddress.get() + ":" + port.get();
     }
 
     @Override
     public Proxy createCopy() {
-        return new Proxy(getIpAddress(), getPort());
+        return new Proxy(getIpAddress(), getPort(), getNickname());
     }
 }

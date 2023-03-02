@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 
 public final class ScriptDialog extends InputDialog<Script> {
 
+    private final TextField scriptNickname;
     private final TextField scriptIdentifierField;
     private final TextField scriptParameters;
     private final ChoiceBox<ScriptType> scriptTypeSelector;
@@ -42,6 +43,9 @@ public final class ScriptDialog extends InputDialog<Script> {
 
         scriptParameters = new TextField();
         scriptParameters.setPromptText("Parameters");
+
+        scriptNickname = new TextField();
+        scriptNickname.setPromptText("Nickname");
 
         scriptIdentifierPane = new FlowPane(10, 10);
         contentBox.getChildren().add(scriptIdentifierPane);
@@ -75,6 +79,8 @@ public final class ScriptDialog extends InputDialog<Script> {
             }
         });
 
+        contentBox.getChildren().add(new FlowPane(10, 10, new Label("Script nickname:"), scriptNickname));
+
         Platform.runLater(localScripts::requestFocus);
     }
 
@@ -97,6 +103,7 @@ public final class ScriptDialog extends InputDialog<Script> {
     @Override
     protected final void setValues(final Script existingItem) {
         if(existingItem == null) {
+            scriptNickname.setText("");
             scriptIdentifierField.setText("");
             scriptParameters.setText("");
             return;
@@ -120,6 +127,7 @@ public final class ScriptDialog extends InputDialog<Script> {
             okButton.setDisable(!validateSDNScriptID());
         }
         scriptParameters.setText(existingItem.getParameters().trim());
+        scriptNickname.setText(existingItem.getNickname());
     }
 
     @Override
@@ -127,9 +135,9 @@ public final class ScriptDialog extends InputDialog<Script> {
         String scriptParametersText = scriptParameters.getText().trim();
         if(scriptParametersText.isEmpty()) scriptParametersText = "none";
         if(scriptTypeSelector.getValue() == ScriptType.LOCAL) {
-            return new Script(localScripts.getValue().getScriptIdentifier(), scriptParametersText, true);
+            return new Script(localScripts.getValue().getScriptIdentifier(), scriptParametersText, true, scriptNickname.getText());
         }
-        return new Script(scriptIdentifierField.getText().trim(), scriptParametersText, false);
+        return new Script(scriptIdentifierField.getText().trim(), scriptParametersText, false, scriptNickname.getText());
     }
 
     @Override
@@ -144,6 +152,7 @@ public final class ScriptDialog extends InputDialog<Script> {
         String scriptParametersText = scriptParameters.getText().trim();
         if(scriptParametersText.isEmpty()) scriptParametersText = "none";
         existingItem.setParameters(scriptParametersText);
+        existingItem.setNickname(scriptNickname.getText());
         return existingItem;
     }
 }
