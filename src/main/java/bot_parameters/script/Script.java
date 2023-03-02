@@ -16,7 +16,7 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
     private static final long serialVersionUID = -3697946363287646016L;
 
     private SimpleStringProperty author;
-    public SimpleStringProperty nickname;
+    private SimpleStringProperty nickname;
     private SimpleStringProperty scriptIdentifier;
     private SimpleStringProperty parameters;
     private SimpleBooleanProperty isLocal;
@@ -82,9 +82,9 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
       if(nickname != null && nickname.get().isEmpty() == false) {
-        return nickname.get();
+        return nickname.get() + " (" + scriptIdentifier.get() + ")";
       }
       return scriptIdentifier.get();
     }

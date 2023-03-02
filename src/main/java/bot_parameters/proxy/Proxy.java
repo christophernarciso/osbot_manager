@@ -22,8 +22,8 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
       this.ipAddress = new SimpleStringProperty(ipAddress);
       this.port = new SimpleIntegerProperty(port);
     }
-    public Proxy(final String ipAddress, final int port, final String niceName) {
-      this.nickname = new SimpleStringProperty(niceName);
+    public Proxy(final String ipAddress, final int port, final String nickname) {
+      this.nickname = new SimpleStringProperty(nickname);
       this.ipAddress = new SimpleStringProperty(ipAddress);
       this.port = new SimpleIntegerProperty(port);
     }
@@ -63,8 +63,8 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
 
     @Override
     public String toString() {
-      if(nickname.get() != null && nickname.get().isEmpty() == false) {
-        return nickname.get();
+      if(nickname != null && nickname.get().isEmpty() == false) {
+        return nickname.get() + " (" + ipAddress.get() + ":" + port.get() + ")";
       }
       return ipAddress.get() + ":" + port.get();
     }

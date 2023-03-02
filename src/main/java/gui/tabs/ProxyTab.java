@@ -22,7 +22,7 @@ public class ProxyTab extends TableTab<Proxy> {
         super("Proxies", "No proxies found.", new ProxyDialog());
 
         TableColumn<Proxy, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("niceName"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
 
         TableColumn<Proxy, String> ipCol = new TableColumn<>("IP Address");
         ipCol.setCellValueFactory(new PropertyValueFactory<>("ipAddress"));
