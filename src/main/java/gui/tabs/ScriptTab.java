@@ -10,12 +10,15 @@ public class ScriptTab extends TableTab<Script> {
     public ScriptTab() {
         super("Scripts", "No scripts found.", new ScriptDialog());
 
+        TableColumn<Script, String> scriptNicknameCol = new TableColumn<>("Name");
+        scriptNicknameCol.setCellValueFactory(new PropertyValueFactory<>("nickname"));
+
         TableColumn<Script, String> scriptIdCol = new TableColumn<>("Script ID");
         scriptIdCol.setCellValueFactory(new PropertyValueFactory<>("scriptIdentifier"));
 
         TableColumn<Script, String> scriptParamCol = new TableColumn<>("Parameters");
         scriptParamCol.setCellValueFactory(new PropertyValueFactory<>("parameters"));
 
-        getTableView().getColumns().addAll(scriptIdCol, scriptParamCol);
+        getTableView().getColumns().addAll(scriptNicknameCol, scriptIdCol, scriptParamCol);
     }
 }

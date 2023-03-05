@@ -12,12 +12,15 @@ import javafx.scene.layout.FlowPane;
 
 public final class ProxyDialog extends InputDialog<Proxy> {
 
-    private final TextField ip, port, username;
+    private final TextField nickname, ip, port, username;
     private final PasswordField password;
 
     public ProxyDialog() {
 
         setHeaderText("Add A Proxy");
+
+        nickname = new TextField();
+        nickname.setPromptText("(Optional) Proxy Name");
 
         ip = new TextField();
         ip.setPromptText("IP Address");
@@ -31,6 +34,8 @@ public final class ProxyDialog extends InputDialog<Proxy> {
 
         password = new PasswordField();
         password.setPromptText("(Optional) Password");
+
+        contentBox.getChildren().add(new FlowPane(10, 10, new Label("Name:"), nickname));
 
         contentBox.getChildren().add(new FlowPane(10, 10, new Label("IP:"), ip));
 
@@ -52,12 +57,15 @@ public final class ProxyDialog extends InputDialog<Proxy> {
     @Override
     protected final void setValues(final Proxy existingItem) {
         if(existingItem == null) {
+            nickname.setText("");
             ip.setText("");
             port.setText("");
             username.setText("");
             password.setText("");
             return;
         }
+
+        nickname.setText(existingItem.getNickname());
         ip.setText(existingItem.getIpAddress());
         port.setText(String.valueOf(existingItem.getPort()));
         if(existingItem instanceof SecuredProxy) {
@@ -71,13 +79,14 @@ public final class ProxyDialog extends InputDialog<Proxy> {
     @Override
     public final Proxy onAdd() {
         if (!username.getText().trim().isEmpty()) {
-            return new SecuredProxy(ip.getText(), Integer.parseInt(port.getText()), username.getText(), password.getText());
+            return new SecuredProxy(ip.getText(), Integer.parseInt(port.getText()), username.getText(), password.getText(), nickname.getText());
         }
-        return new Proxy(ip.getText(), Integer.parseInt(port.getText()));
+        return new Proxy(ip.getText(), Integer.parseInt(port.getText()), nickname.getText());
     }
 
     @Override
     protected final Proxy onEdit(final Proxy existingItem) {
+        existingItem.setNickname((nickname.getText()));
         existingItem.setIP(ip.getText());
         existingItem.setPort(Integer.parseInt(port.getText()));
         if(existingItem instanceof SecuredProxy) {

@@ -5,21 +5,31 @@ import bot_parameters.interfaces.Copyable;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
 
     private static final long serialVersionUID = -6367454010350132779L;
 
+    SimpleStringProperty nickname;
     SimpleStringProperty ipAddress;
     SimpleIntegerProperty port;
 
     public Proxy(final String ipAddress, final int port) {
-        this.ipAddress = new SimpleStringProperty(ipAddress);
-        this.port = new SimpleIntegerProperty(port);
+      this.ipAddress = new SimpleStringProperty(ipAddress);
+      this.port = new SimpleIntegerProperty(port);
+    }
+    public Proxy(final String ipAddress, final int port, final String nickname) {
+      this.nickname = new SimpleStringProperty(nickname);
+      this.ipAddress = new SimpleStringProperty(ipAddress);
+      this.port = new SimpleIntegerProperty(port);
+    }
+
+    public final String getNickname() {
+        if(nickname != null) {
+          return nickname.get();
+        }
+        return "";
     }
 
     public final String getIpAddress() {
@@ -30,6 +40,8 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
         return port.get();
     }
 
+    public final void setNickname(final String nickname) { this.nickname.set(nickname); }
+
     public final void setIP(final String ip) {
         this.ipAddress.set(ip);
     }
@@ -39,11 +51,17 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(getIpAddress());
         stream.writeInt(getPort());
+        stream.writeObject(getNickname());
     }
 
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         ipAddress = new SimpleStringProperty((String) stream.readObject());
         port = new SimpleIntegerProperty(stream.readInt());
+        try {
+          nickname = new SimpleStringProperty((String) stream.readObject());
+        } catch(OptionalDataException e) {
+
+        }
     }
 
     @Override
@@ -53,11 +71,17 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
 
     @Override
     public String toString() {
-        return ipAddress.get() + ":" + port.get();
+      if(nickname != null && !nickname.get().isEmpty()) {
+        return nickname.get() + " (" + ipAddress.get() + ":" + port.get() + ")";
+      }
+      return ipAddress.get() + ":" + port.get();
     }
 
     @Override
     public Proxy createCopy() {
+        if(nickname != null) {
+          return new Proxy(getIpAddress(), getPort(), getNickname());
+        }
         return new Proxy(getIpAddress(), getPort());
     }
 }

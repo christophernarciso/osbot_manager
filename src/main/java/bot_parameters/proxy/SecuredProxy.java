@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 
 public class SecuredProxy extends Proxy {
 
@@ -17,6 +18,12 @@ public class SecuredProxy extends Proxy {
         super(ip, port);
         this.username = username;
         this.password = password;
+    }
+
+    public SecuredProxy(final String ip, final int port, final String username, final String password, final String nickname) {
+      super(ip, port, nickname);
+      this.username = username;
+      this.password = password;
     }
 
     public final String getUsername() {
@@ -38,6 +45,7 @@ public class SecuredProxy extends Proxy {
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(getIpAddress());
         stream.writeInt(getPort());
+        stream.writeObject(getNickname());
         stream.writeObject(getUsername());
         stream.writeObject(getPassword());
     }
@@ -47,6 +55,11 @@ public class SecuredProxy extends Proxy {
         port = new SimpleIntegerProperty(stream.readInt());
         setUsername((String) stream.readObject());
         setPassword((String) stream.readObject());
+        try {
+          nickname = new SimpleStringProperty((String) stream.readObject());
+        } catch (OptionalDataException e) {
+
+        }
     }
 
     @Override
@@ -61,6 +74,6 @@ public class SecuredProxy extends Proxy {
 
     @Override
     public SecuredProxy createCopy() {
-        return new SecuredProxy(getIpAddress(), getPort(), getUsername(), getPassword());
+        return new SecuredProxy(getIpAddress(), getPort(), getUsername(), getPassword(), getNickname());
     }
 }

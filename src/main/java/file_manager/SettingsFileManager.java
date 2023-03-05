@@ -27,10 +27,10 @@ public final class SettingsFileManager {
                 }
             }
         } catch (final EOFException e) {
-            System.out.println("Config file read successfully.");
+          System.out.println("Config file read successfully.");
         } catch (final Exception e) {
-            e.printStackTrace();
-            new ExceptionDialog(e).show();
+          e.printStackTrace();
+          new ExceptionDialog(e).show();
         }
         return objects;
     }
