@@ -19,7 +19,7 @@ public class World implements BotParameter, Serializable {
 
     private static List<World> worlds;
 
-    private static Comparator<World> worldComparator = (w1, w2) -> {
+    private static final Comparator<World> worldComparator = (w1, w2) -> {
         int typeComparison = w1.getType().compareTo(w2.getType());
 
         if (typeComparison != 0) {
@@ -37,6 +37,48 @@ public class World implements BotParameter, Serializable {
         this.type = type;
         this.number = number;
         this.detail = detail;
+    }
+
+    public static List<World> getWorlds() {
+        if (worlds == null) {
+            loadWorlds();
+        }
+        return worlds;
+    }
+
+    public static Comparator<World> getWorldComparator() {
+        return worldComparator;
+    }
+
+    private static void loadWorlds() {
+        worlds = new ArrayList<>();
+
+        try {
+            Document doc = Jsoup.connect("http://oldschool.runescape.com/slu").get();
+            Elements servers = doc.select("tr.server-list__row");
+            for (Element server : servers) {
+                Element serverLink = server.selectFirst(".server-list__world-link");
+                String worldIDStr = serverLink.id().replaceAll("slu-world-", "");
+                int worldNum = Integer.parseInt(worldIDStr);
+
+                Element membershipType = server.selectFirst(".server-list__row-cell--type");
+                boolean members = membershipType.html().equals("Members");
+
+                WorldType worldType = members ? WorldType.MEMBERS : WorldType.F2P;
+
+                String worldDetail = membershipType.nextElementSibling().html();
+
+                if (worldDetail.equals("-")) {
+                    worldDetail = "";
+                }
+
+                worlds.add(new World(worldType, worldNum, worldDetail));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        worlds.sort(worldComparator);
     }
 
     public final WorldType getType() {
@@ -85,50 +127,8 @@ public class World implements BotParameter, Serializable {
         return worldStr;
     }
 
-    public static List<World> getWorlds() {
-        if (worlds == null) {
-            loadWorlds();
-        }
-        return worlds;
-    }
-
-    public static Comparator<World> getWorldComparator() {
-        return worldComparator;
-    }
-
-    private static void loadWorlds() {
-        worlds = new ArrayList<>();
-
-        try {
-            Document doc = Jsoup.connect("http://oldschool.runescape.com/slu").get();
-            Elements servers = doc.select("tr.server-list__row");
-            for (Element server : servers) {
-                Element serverLink = server.selectFirst(".server-list__world-link");
-                String worldIDStr = serverLink.id().replaceAll("slu-world-", "");
-                int worldNum = Integer.parseInt(worldIDStr);
-
-                Element membershipType = server.selectFirst(".server-list__row-cell--type");
-                boolean members = membershipType.html().equals("Members");
-
-                WorldType worldType = members ? WorldType.MEMBERS : WorldType.F2P;
-
-                String worldDetail = membershipType.nextElementSibling().html();
-
-                if (worldDetail.equals("-")) {
-                    worldDetail = "";
-                }
-
-                worlds.add(new World(worldType, worldNum, worldDetail));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        worlds.sort(worldComparator);
-    }
-
     @Override
     public String[] toParameter() {
-        return new String[] { "-world",  String.valueOf(getNumber()) };
+        return new String[]{"-world", String.valueOf(getNumber())};
     }
 }

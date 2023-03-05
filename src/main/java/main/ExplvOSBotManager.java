@@ -11,13 +11,13 @@ public final class ExplvOSBotManager extends Application {
         launch(args);
     }
 
-    public static final String getVersion() {
+    public static String getVersion() {
         String version = ExplvOSBotManager.class.getPackage().getImplementationVersion();
         return version != null ? version : "";
     }
 
     @Override
-    public final void start(final Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         if (Updater.isUpdateRequired()) {
             Updater.update();
         }

@@ -55,8 +55,8 @@ public final class ProxyDialog extends InputDialog<Proxy> {
     }
 
     @Override
-    protected final void setValues(final Proxy existingItem) {
-        if(existingItem == null) {
+    protected void setValues(final Proxy existingItem) {
+        if (existingItem == null) {
             nickname.setText("");
             ip.setText("");
             port.setText("");
@@ -68,7 +68,7 @@ public final class ProxyDialog extends InputDialog<Proxy> {
         nickname.setText(existingItem.getNickname());
         ip.setText(existingItem.getIpAddress());
         port.setText(String.valueOf(existingItem.getPort()));
-        if(existingItem instanceof SecuredProxy) {
+        if (existingItem instanceof SecuredProxy) {
             SecuredProxy securedProxy = (SecuredProxy) existingItem;
             username.setText(securedProxy.getUsername());
             password.setText(securedProxy.getPassword());
@@ -77,7 +77,7 @@ public final class ProxyDialog extends InputDialog<Proxy> {
     }
 
     @Override
-    public final Proxy onAdd() {
+    public Proxy onAdd() {
         if (!username.getText().trim().isEmpty()) {
             return new SecuredProxy(ip.getText(), Integer.parseInt(port.getText()), username.getText(), password.getText(), nickname.getText());
         }
@@ -85,18 +85,18 @@ public final class ProxyDialog extends InputDialog<Proxy> {
     }
 
     @Override
-    protected final Proxy onEdit(final Proxy existingItem) {
+    protected Proxy onEdit(final Proxy existingItem) {
         existingItem.setNickname((nickname.getText()));
         existingItem.setIP(ip.getText());
         existingItem.setPort(Integer.parseInt(port.getText()));
-        if(existingItem instanceof SecuredProxy) {
-            if(!username.getText().trim().isEmpty()) {
+        if (existingItem instanceof SecuredProxy) {
+            if (!username.getText().trim().isEmpty()) {
                 SecuredProxy securedProxy = (SecuredProxy) existingItem;
                 securedProxy.setUsername(username.getText());
                 securedProxy.setPassword(password.getText());
             }
-        } else if(!username.getText().trim().isEmpty()) {
-            return new SecuredProxy(ip.getText(), Integer.parseInt(port.getText()), username.getText(), password.getText());
+        } else if (!username.getText().trim().isEmpty()) {
+            return new SecuredProxy(ip.getText(), Integer.parseInt(port.getText()), username.getText(), password.getText(), nickname.getText());
         }
         return existingItem;
     }

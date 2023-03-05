@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 public class WorldSelectorDialog extends Dialog {
 
-    private List<World> allWorlds = World.getWorlds();
-    private ObservableList<World> availableWorlds =  FXCollections.observableArrayList(allWorlds);
-    private ObservableList<World> selectedWorlds = FXCollections.observableArrayList();
+    private final List<World> allWorlds = World.getWorlds();
+    private final ObservableList<World> availableWorlds = FXCollections.observableArrayList(allWorlds);
+    private final ObservableList<World> selectedWorlds = FXCollections.observableArrayList();
 
     public WorldSelectorDialog() {
         setTitle("Explv's OSBot Manager");
@@ -109,6 +109,15 @@ public class WorldSelectorDialog extends Dialog {
         getDialogPane().getStyleClass().add("custom-dialog");
     }
 
+    public void clearSelectedWorlds() {
+        this.selectedWorlds.clear();
+        this.availableWorlds.setAll(allWorlds);
+    }
+
+    public ObservableList<World> getSelectedWorlds() {
+        return selectedWorlds;
+    }
+
     public void setSelectedWorlds(final ObservableList<World> selectedWorlds) {
         this.selectedWorlds.clear();
 
@@ -124,14 +133,5 @@ public class WorldSelectorDialog extends Dialog {
 
         this.availableWorlds.setAll(allWorlds);
         this.availableWorlds.removeAll(selectedWorlds);
-    }
-
-    public void clearSelectedWorlds() {
-        this.selectedWorlds.clear();
-        this.availableWorlds.setAll(allWorlds);
-    }
-
-    public ObservableList<World> getSelectedWorlds() {
-        return selectedWorlds;
     }
 }

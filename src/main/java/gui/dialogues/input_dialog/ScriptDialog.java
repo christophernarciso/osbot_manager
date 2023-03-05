@@ -52,14 +52,14 @@ public final class ScriptDialog extends InputDialog<Script> {
         scriptIdentifierPane.getChildren().add(scriptTypeSelector);
         scriptIdentifierPane.getChildren().add(localScripts);
 
-        if(!localScripts.getItems().isEmpty()) {
+        if (!localScripts.getItems().isEmpty()) {
             okButton.setDisable(false);
         }
 
         scriptTypeSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue == newValue) return;
 
-            if(newValue == ScriptType.SDN) {
+            if (newValue == ScriptType.SDN) {
                 showSDNScriptField();
                 if (!validateSDNScriptID()) okButton.setDisable(true);
             } else {
@@ -70,7 +70,7 @@ public final class ScriptDialog extends InputDialog<Script> {
         contentBox.getChildren().add(new FlowPane(10, 10, new Label("Script parameters:"), scriptParameters));
 
         scriptIdentifierField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!validateSDNScriptID()) {
+            if (!validateSDNScriptID()) {
                 scriptIdentifierField.setStyle("-fx-text-fill: red;");
                 okButton.setDisable(true);
             } else {
@@ -101,26 +101,26 @@ public final class ScriptDialog extends InputDialog<Script> {
     }
 
     @Override
-    protected final void setValues(final Script existingItem) {
-        if(existingItem == null) {
+    protected void setValues(final Script existingItem) {
+        if (existingItem == null) {
             scriptNickname.setText("");
             scriptIdentifierField.setText("");
             scriptParameters.setText("");
             return;
         }
-        if(existingItem.isLocal()) {
-            if(scriptTypeSelector.getValue() != ScriptType.LOCAL) {
+        if (existingItem.isLocal()) {
+            if (scriptTypeSelector.getValue() != ScriptType.LOCAL) {
                 scriptTypeSelector.setValue(ScriptType.LOCAL);
             }
-            for(final Script localScript : localScripts.getItems()) {
-                if(localScript.getScriptIdentifier().equals(existingItem.getScriptIdentifier())) {
+            for (final Script localScript : localScripts.getItems()) {
+                if (localScript.getScriptIdentifier().equals(existingItem.getScriptIdentifier())) {
                     localScripts.getSelectionModel().select(localScript);
                     break;
                 }
             }
             okButton.setDisable(localScripts.getSelectionModel().getSelectedItem() == null);
         } else {
-            if(scriptTypeSelector.getValue() != ScriptType.SDN) {
+            if (scriptTypeSelector.getValue() != ScriptType.SDN) {
                 scriptTypeSelector.setValue(ScriptType.SDN);
             }
             scriptIdentifierField.setText(existingItem.getScriptIdentifier().trim());
@@ -131,18 +131,18 @@ public final class ScriptDialog extends InputDialog<Script> {
     }
 
     @Override
-    protected final Script onAdd() {
+    protected Script onAdd() {
         String scriptParametersText = scriptParameters.getText().trim();
-        if(scriptParametersText.isEmpty()) scriptParametersText = "none";
-        if(scriptTypeSelector.getValue() == ScriptType.LOCAL) {
+        if (scriptParametersText.isEmpty()) scriptParametersText = "none";
+        if (scriptTypeSelector.getValue() == ScriptType.LOCAL) {
             return new Script(localScripts.getValue().getScriptIdentifier(), scriptParametersText, true, scriptNickname.getText());
         }
         return new Script(scriptIdentifierField.getText().trim(), scriptParametersText, false, scriptNickname.getText());
     }
 
     @Override
-    protected final Script onEdit(Script existingItem) {
-        if(scriptTypeSelector.getValue() == ScriptType.LOCAL) {
+    protected Script onEdit(Script existingItem) {
+        if (scriptTypeSelector.getValue() == ScriptType.LOCAL) {
             existingItem.setScriptIdentifier(localScripts.getValue().getScriptIdentifier());
             existingItem.setIsLocal(true);
         } else {
@@ -150,7 +150,7 @@ public final class ScriptDialog extends InputDialog<Script> {
             existingItem.setIsLocal(false);
         }
         String scriptParametersText = scriptParameters.getText().trim();
-        if(scriptParametersText.isEmpty()) scriptParametersText = "none";
+        if (scriptParametersText.isEmpty()) scriptParametersText = "none";
         existingItem.setParameters(scriptParametersText);
         existingItem.setNickname(scriptNickname.getText());
         return existingItem;

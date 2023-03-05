@@ -51,7 +51,7 @@ public class RunescapeAccountTab extends TableTab<RunescapeAccount> {
                  BufferedReader br = new BufferedReader(fileReader)) {
 
                 String line;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
 
                     String[] values = line.trim().split(":");
 

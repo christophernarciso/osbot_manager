@@ -34,11 +34,11 @@ public final class RunescapeAccount extends Account implements BotParameter, Cop
         this.isBanned = new SimpleBooleanProperty();
     }
 
-    public final int getPin() {
+    public int getPin() {
         return pin.get();
     }
 
-    public final void setPin(final int pin) {
+    public void setPin(final int pin) {
         this.pin = new SimpleIntegerProperty(pin);
     }
 
@@ -61,8 +61,8 @@ public final class RunescapeAccount extends Account implements BotParameter, Cop
     }
 
     @Override
-    public final String[] toParameter() {
-        return new String[] { "-bot", String.format("%s:%s:%d", getUsername(), getPassword(), pin.get()) };
+    public String[] toParameter() {
+        return new String[]{"-bot", String.format("%s:%s:%d", getUsername(), getPassword(), pin.get())};
     }
 
     @Override
@@ -164,7 +164,6 @@ public final class RunescapeAccount extends Account implements BotParameter, Cop
         }
         return Optional.empty();
     }
-
 
 
     private boolean isAccountStatusBanned(final HttpResponse accountStatusResponse) {

@@ -8,7 +8,6 @@ import bot_parameters.script.Script;
 import exceptions.ClientOutOfDateException;
 import exceptions.IncorrectLoginException;
 import exceptions.MissingWebWalkDataException;
-import osbot_client.OSBotClient;
 import gui.dialogues.error_dialog.ExceptionDialog;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -18,6 +17,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import osbot_client.OSBotClient;
 import settings.Settings;
 
 import java.io.*;
@@ -471,108 +471,108 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return runescapeAccount.get();
     }
 
-    public ObservableList<Script> getScripts() {
-        return scripts.get();
-    }
-
-    public Proxy getProxy() {
-        return proxy.get();
-    }
-
-    public Integer getMemoryAllocation() {
-        return memoryAllocation.get();
-    }
-
-    public boolean isCollectData() {
-        return collectData.get();
-    }
-
-    public boolean isDebugMode() {
-        return debugMode.get();
-    }
-
-    public Integer getDebugPort() {
-        return debugPort.get();
-    }
-
-    public boolean isLowResourceMode() {
-        return lowResourceMode.get();
-    }
-
-    public boolean isLowCpuMode() {
-        return lowCpuMode.get();
-    }
-
-    public boolean isReflection() {
-        return reflection.get();
-    }
-
-    public boolean isNoRandoms() {
-        return noRandoms.get();
-    }
-
-    public boolean isNoInterface() {
-        return noInterface.get();
-    }
-
-    public boolean isNoRender() {
-        return noRender.get();
-    }
-
-    public ObservableList<World> getWorlds() {
-        return worlds.get();
-    }
-
     public void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
         this.runescapeAccount.set(runescapeAccount);
+    }
+
+    public ObservableList<Script> getScripts() {
+        return scripts.get();
     }
 
     public void setScripts(final ObservableList<Script> scripts) {
         this.scripts.set(scripts);
     }
 
+    public Proxy getProxy() {
+        return proxy.get();
+    }
+
     public void setProxy(final Proxy proxy) {
         this.proxy.set(proxy);
+    }
+
+    public Integer getMemoryAllocation() {
+        return memoryAllocation.get();
     }
 
     public void setMemoryAllocation(final Integer memoryAllocation) {
         this.memoryAllocation.set(memoryAllocation);
     }
 
+    public boolean isCollectData() {
+        return collectData.get();
+    }
+
     public void setCollectData(final boolean collectData) {
         this.collectData.set(collectData);
+    }
+
+    public boolean isDebugMode() {
+        return debugMode.get();
     }
 
     public void setDebugMode(final boolean debugMode) {
         this.debugMode.set(debugMode);
     }
 
+    public Integer getDebugPort() {
+        return debugPort.get();
+    }
+
     public void setDebugPort(final Integer debugPort) {
         this.debugPort.set(debugPort);
     }
 
-    public void setLowCpuMode(final boolean lowCpuMode) {
-        this.lowCpuMode.set(lowCpuMode);
+    public boolean isLowResourceMode() {
+        return lowResourceMode.get();
     }
 
     public void setLowResourceMode(final boolean lowResourceMode) {
         this.lowResourceMode.set(lowResourceMode);
     }
 
+    public boolean isLowCpuMode() {
+        return lowCpuMode.get();
+    }
+
+    public void setLowCpuMode(final boolean lowCpuMode) {
+        this.lowCpuMode.set(lowCpuMode);
+    }
+
+    public boolean isReflection() {
+        return reflection.get();
+    }
+
     public void setReflection(final boolean reflection) {
         this.reflection.set(reflection);
+    }
+
+    public boolean isNoRandoms() {
+        return noRandoms.get();
     }
 
     public void setNoRandoms(final boolean noRandoms) {
         this.noRandoms.set(noRandoms);
     }
 
+    public boolean isNoInterface() {
+        return noInterface.get();
+    }
+
     public void setNoInterface(final boolean noInterface) {
         this.noInterface.set(noInterface);
     }
 
+    public boolean isNoRender() {
+        return noRender.get();
+    }
+
     public void setNoRender(final boolean noRender) {
         this.noRender.set(noRender);
+    }
+
+    public ObservableList<World> getWorlds() {
+        return worlds.get();
     }
 
     public void setWorlds(final List<World> worlds) {

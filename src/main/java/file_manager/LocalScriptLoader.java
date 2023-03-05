@@ -17,7 +17,7 @@ import java.util.jar.JarFile;
 
 public final class LocalScriptLoader {
 
-    public final List<Script> getLocalScripts() {
+    public List<Script> getLocalScripts() {
 
         final List<Script> localScripts = new ArrayList<>();
 
@@ -36,13 +36,14 @@ public final class LocalScriptLoader {
                 ClassLoader classLoader = new URLClassLoader(new URL[]{url});
                 JarFile jarFile = new JarFile(file.getAbsolutePath());
                 addScriptsFromJar(jarFile, classLoader, localScripts);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return localScripts;
     }
 
     private void addScriptsFromJar(final JarFile jarFile, final ClassLoader classLoader, final List<Script> localScripts) {
-        System.out.println(String.format("Loading jar: '%s'", jarFile.getName()));
+        System.out.printf("Loading jar: '%s'%n", jarFile.getName());
         Enumeration entries = jarFile.entries();
         while (entries.hasMoreElements()) {
             JarEntry entry = (JarEntry) entries.nextElement();
@@ -60,7 +61,8 @@ public final class LocalScriptLoader {
             if (scriptManifest != null) {
                 return Optional.of(new Script(((ScriptManifest) scriptManifest).name(), "", true));
             }
-        } catch (Exception | NoClassDefFoundError ignored) {}
+        } catch (Exception | NoClassDefFoundError ignored) {
+        }
         return Optional.empty();
     }
 }

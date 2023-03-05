@@ -4,7 +4,6 @@ import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
 import bot_parameters.proxy.Proxy;
 import bot_parameters.script.Script;
-import osbot_client.OSBotClient;
 import gui.ToolbarButton;
 import gui.dialogues.error_dialog.ExceptionDialog;
 import gui.dialogues.input_dialog.ConfigurationDialog;
@@ -15,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import osbot_client.OSBotClient;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -150,7 +150,9 @@ public class ConfigurationTab extends TableTab<Configuration> {
         runConfigurations(getTableView().getSelectionModel().getSelectedItems());
     }
 
-    private void stop() { getTableView().getSelectionModel().getSelectedItems().forEach(Configuration::stop); }
+    private void stop() {
+        getTableView().getSelectionModel().getSelectedItems().forEach(Configuration::stop);
+    }
 
     private void showLog() {
         Configuration configuration = getTableView().getSelectionModel().getSelectedItem();

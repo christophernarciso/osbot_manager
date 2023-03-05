@@ -45,8 +45,8 @@ public final class RunescapeAccountDialog extends InputDialog<RunescapeAccount> 
     }
 
     @Override
-    protected final void setValues(final RunescapeAccount existingItem) {
-        if(existingItem == null) {
+    protected void setValues(final RunescapeAccount existingItem) {
+        if (existingItem == null) {
             username.setText("");
             password.setText("");
             bankPin.setText("");
@@ -59,14 +59,14 @@ public final class RunescapeAccountDialog extends InputDialog<RunescapeAccount> 
     }
 
     @Override
-    public final RunescapeAccount onAdd() {
+    public RunescapeAccount onAdd() {
         String bankPinText = bankPin.getText();
         if (bankPinText.isEmpty()) bankPinText = "1234";
         return new RunescapeAccount(username.getText(), password.getText(), Integer.parseInt(bankPinText));
     }
 
     @Override
-    protected final RunescapeAccount onEdit(final RunescapeAccount existingItem) {
+    protected RunescapeAccount onEdit(final RunescapeAccount existingItem) {
         existingItem.setUsername(username.getText());
         existingItem.setPassword(password.getText());
         existingItem.setPin(Integer.parseInt(bankPin.getText()));

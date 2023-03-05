@@ -6,7 +6,7 @@ public enum WorldType implements Serializable {
     F2P("F2P"),
     MEMBERS("Members");
 
-    private String name;
+    private final String name;
 
     WorldType(final String name) {
         this.name = name;

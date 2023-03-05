@@ -2,11 +2,11 @@ package bot_parameters.proxy;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 
 public class SecuredProxy extends Proxy {
 
@@ -21,21 +21,21 @@ public class SecuredProxy extends Proxy {
     }
 
     public SecuredProxy(final String ip, final int port, final String username, final String password, final String nickname) {
-      super(ip, port, nickname);
-      this.username = username;
-      this.password = password;
+        super(ip, port, nickname);
+        this.username = username;
+        this.password = password;
     }
 
     public final String getUsername() {
         return username;
     }
 
-    public final String getPassword() {
-        return password;
-    }
-
     public final void setUsername(final String username) {
         this.username = username;
+    }
+
+    public final String getPassword() {
+        return password;
     }
 
     public final void setPassword(final String password) {
@@ -45,9 +45,9 @@ public class SecuredProxy extends Proxy {
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(getIpAddress());
         stream.writeInt(getPort());
-        stream.writeObject(getNickname());
         stream.writeObject(getUsername());
         stream.writeObject(getPassword());
+        stream.writeObject(getNickname());
     }
 
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
@@ -56,15 +56,15 @@ public class SecuredProxy extends Proxy {
         setUsername((String) stream.readObject());
         setPassword((String) stream.readObject());
         try {
-          nickname = new SimpleStringProperty((String) stream.readObject());
-        } catch (OptionalDataException e) {
-
+            nickname = new SimpleStringProperty((String) stream.readObject());
+        } catch (Exception e) {
+            nickname = new SimpleStringProperty(StringUtils.EMPTY);
         }
     }
 
     @Override
     public final String[] toParameter() {
-        return new String[] { "-proxy", String.format("%s:%d:%s:%s", getIpAddress(), getPort(), username, password) };
+        return new String[]{"-proxy", String.format("%s:%d:%s:%s", getIpAddress(), getPort(), username, password)};
     }
 
     @Override

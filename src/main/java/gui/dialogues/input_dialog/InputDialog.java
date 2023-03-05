@@ -21,8 +21,8 @@ public abstract class InputDialog<T> extends Dialog<T> {
         okButton = getDialogPane().lookupButton(ButtonType.OK);
         okButton.setDisable(true);
         setResultConverter(buttonType -> {
-            if(buttonType != ButtonType.OK) return null;
-            if(existingItem != null) return onEdit(existingItem);
+            if (buttonType != ButtonType.OK) return null;
+            if (existingItem != null) return onEdit(existingItem);
             return onAdd();
         });
         getDialogPane().getStylesheets().add("/css/dialog.css");

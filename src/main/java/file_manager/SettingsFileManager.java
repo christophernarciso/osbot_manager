@@ -27,10 +27,10 @@ public final class SettingsFileManager {
                 }
             }
         } catch (final EOFException e) {
-          System.out.println("Config file read successfully.");
+            System.out.println("Config file read successfully.");
         } catch (final Exception e) {
-          e.printStackTrace();
-          new ExceptionDialog(e).show();
+            e.printStackTrace();
+            new ExceptionDialog(e).show();
         }
         return objects;
     }
@@ -40,7 +40,7 @@ public final class SettingsFileManager {
 
             final File file = getFileChooser().showSaveDialog(null);
 
-            if(file == null) return;
+            if (file == null) return;
 
             if (!file.exists() && !file.createNewFile()) {
                 new ExceptionDialog(new Exception("Failed to save settings")).showAndWait();

@@ -11,9 +11,9 @@ import javafx.scene.layout.*;
 
 public class TableTab<T extends Copyable<T>> extends Tab {
 
-    private final TableView<T> tableView;
     final HBox toolBar;
     final ContextMenu contextMenu;
+    private final TableView<T> tableView;
     private final InputDialog<T> inputDialog;
     private T copiedItem;
 
@@ -29,12 +29,12 @@ public class TableTab<T extends Copyable<T>> extends Tab {
         tableView.setPlaceholder(new Label(placeholder));
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.DELETE) {
+            if (event.getCode() == KeyCode.DELETE) {
                 tableView.getItems().remove(tableView.getSelectionModel().getSelectedIndex());
             }
         });
         tableView.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2) {
+            if (event.getClickCount() == 2) {
                 onEdit();
             }
         });
@@ -82,11 +82,7 @@ public class TableTab<T extends Copyable<T>> extends Tab {
         setContent(anchorPane);
 
         getTableView().getItems().addListener((ListChangeListener<T>) c -> {
-            if (getTableView().getItems().isEmpty()) {
-                getTableView().lookup("TableHeaderRow").setVisible(false);
-            } else {
-                getTableView().lookup("TableHeaderRow").setVisible(true);
-            }
+            getTableView().lookup("TableHeaderRow").setVisible(!getTableView().getItems().isEmpty());
         });
 
         contextMenu = new ContextMenu();
@@ -137,7 +133,7 @@ public class TableTab<T extends Copyable<T>> extends Tab {
 
     private void onEdit() {
         final int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
-        if(selectedIndex > -1) {
+        if (selectedIndex > -1) {
             inputDialog.setExistingItem(tableView.getSelectionModel().getSelectedItem());
             inputDialog.showAndWait().ifPresent(editedItem -> {
                 tableView.getItems().set(selectedIndex, editedItem);
@@ -165,9 +161,9 @@ public class TableTab<T extends Copyable<T>> extends Tab {
         @Override
         protected void updateItem(final String item, final boolean empty) {
             super.updateItem(item, empty);
-            if(item != null && !item.isEmpty()){
+            if (item != null && !item.isEmpty()) {
                 setText(new String(new char[item.length()]).replace("\0", "*"));
-            } else{
+            } else {
                 setText(null);
             }
         }
