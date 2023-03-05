@@ -3,9 +3,11 @@ package bot_parameters.proxy;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 
 public class SecuredProxy extends Proxy {
 
@@ -19,11 +21,11 @@ public class SecuredProxy extends Proxy {
         this.password = password;
     }
 
-  public SecuredProxy(final String ip, final int port, final String username, final String password, final String niceName) {
-    super(ip, port, niceName);
-    this.username = username;
-    this.password = password;
-  }
+    public SecuredProxy(final String ip, final int port, final String username, final String password, final String nickname) {
+      super(ip, port, nickname);
+      this.username = username;
+      this.password = password;
+    }
 
     public final String getUsername() {
         return username;
@@ -44,15 +46,21 @@ public class SecuredProxy extends Proxy {
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.writeObject(getIpAddress());
         stream.writeInt(getPort());
+        stream.writeObject(getNickname());
         stream.writeObject(getUsername());
         stream.writeObject(getPassword());
     }
 
-    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException, OptionalDataException {
         ipAddress = new SimpleStringProperty((String) stream.readObject());
         port = new SimpleIntegerProperty(stream.readInt());
         setUsername((String) stream.readObject());
         setPassword((String) stream.readObject());
+        try {
+          nickname = new SimpleStringProperty((String) stream.readObject());
+        } catch (OptionalDataException e) {
+
+        }
     }
 
     @Override
@@ -67,6 +75,6 @@ public class SecuredProxy extends Proxy {
 
     @Override
     public SecuredProxy createCopy() {
-        return new SecuredProxy(getIpAddress(), getPort(), getUsername(), getPassword());
+        return new SecuredProxy(getIpAddress(), getPort(), getUsername(), getPassword(), getNickname());
     }
 }

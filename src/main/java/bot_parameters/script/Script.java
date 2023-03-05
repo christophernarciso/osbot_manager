@@ -6,10 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import sun.java2d.pipe.SpanShapeRenderer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public final class Script implements BotParameter, Copyable<Script>, Serializable {
 
@@ -34,7 +31,12 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
     this.nickname = new SimpleStringProperty(nickname);
   }
 
-    public final String getNickname() { return nickname.get(); }
+    public final String getNickname() {
+      if(nickname != null) {
+        return nickname.get();
+      }
+      return "";
+    }
     public final String getScriptIdentifier() {
         return scriptIdentifier.get();
     }
@@ -74,16 +76,20 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         stream.writeObject(nickname.get());
     }
 
-    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException, ObjectStreamException {
         scriptIdentifier = new SimpleStringProperty((String) stream.readObject());
         parameters = new SimpleStringProperty((String) stream.readObject());
         isLocal = new SimpleBooleanProperty(stream.readBoolean());
-        nickname = new SimpleStringProperty((String) stream.readObject());
+        try {
+          nickname = new SimpleStringProperty((String) stream.readObject());
+        } catch (OptionalDataException e) {
+
+        }
     }
 
     @Override
     public final String toString() {
-      if(nickname != null && nickname.get().isEmpty() == false) {
+      if(nickname != null && !nickname.get().isEmpty()) {
         return nickname.get() + " (" + scriptIdentifier.get() + ")";
       }
       return scriptIdentifier.get();
@@ -91,6 +97,9 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
 
     @Override
     public Script createCopy() {
+      if(nickname != null) {
         return new Script(getScriptIdentifier(), getParameters(), isLocal(), getNickname());
+      }
+      return new Script(getScriptIdentifier(), getParameters(), isLocal());
     }
 }
