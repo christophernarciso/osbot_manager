@@ -76,7 +76,7 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         stream.writeObject(nickname.get());
     }
 
-    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException, ObjectStreamException {
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         scriptIdentifier = new SimpleStringProperty((String) stream.readObject());
         parameters = new SimpleStringProperty((String) stream.readObject());
         isLocal = new SimpleBooleanProperty(stream.readBoolean());

@@ -3,7 +3,6 @@ package bot_parameters.proxy;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -51,7 +50,7 @@ public class SecuredProxy extends Proxy {
         stream.writeObject(getPassword());
     }
 
-    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException, OptionalDataException {
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         ipAddress = new SimpleStringProperty((String) stream.readObject());
         port = new SimpleIntegerProperty(stream.readInt());
         setUsername((String) stream.readObject());

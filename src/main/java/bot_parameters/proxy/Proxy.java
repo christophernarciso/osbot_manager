@@ -54,7 +54,7 @@ public class Proxy implements BotParameter, Copyable<Proxy>, Serializable {
         stream.writeObject(getNickname());
     }
 
-    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException, OptionalDataException {
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         ipAddress = new SimpleStringProperty((String) stream.readObject());
         port = new SimpleIntegerProperty(stream.readInt());
         try {
