@@ -50,6 +50,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     private SimpleBooleanProperty launchGame = new SimpleBooleanProperty();
     private SimpleListProperty<World> worlds = new SimpleListProperty<>(FXCollections.observableArrayList());
     private SimpleBooleanProperty isRunning = new SimpleBooleanProperty();
+    private SimpleBooleanProperty closeClient = new SimpleBooleanProperty();
     private String logFileName;
 
     private int processID;
@@ -82,6 +83,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeBoolean(isStopAfterBreak());
         stream.writeBoolean(isMirrorMode());
         stream.writeBoolean(isLaunchGame());
+        stream.writeBoolean(isCloseClient());
         stream.writeObject(logFileName);
     }
 
@@ -170,6 +172,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         } catch (Exception e) {
             System.out.println("Config does not contain new launchgame option, skipping");
             launchGame = new SimpleBooleanProperty();
+        }
+        try {
+            closeClient = new SimpleBooleanProperty(stream.readBoolean());
+        } catch (Exception e) {
+            System.out.println("Config does not contain new closeClient option, skipping");
+            closeClient = new SimpleBooleanProperty();
         }
 
         try {
@@ -290,6 +298,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setStopAfterBreak(isStopAfterBreak());
         configurationCopy.setMirrorMode(isMirrorMode());
         configurationCopy.setLaunchGame(isLaunchGame());
+        configurationCopy.setCloseClient(isCloseClient());
         return configurationCopy;
     }
 
@@ -354,7 +363,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
                                 if (newJavaPIDs.size() == 1) {
                                     processID = newJavaPIDs.get(0);
                                 }
-                            } else if (outputLine.contains("Bot exited") || (outputLine.contains("Script") && outputLine.endsWith("has exited!"))) {
+                            } else if (isCloseClient() && (outputLine.contains("Bot exited") || (outputLine.contains("Script") && outputLine.endsWith("has exited!")))) {
                                 break;
                             }
                         }
@@ -363,12 +372,15 @@ public final class Configuration implements BotParameter, Copyable<Configuration
                     if (processID != -1) {
                         killProcess(processID);
                         processID = -1;
+                        Thread.sleep(1000);
                     }
 
                     setRunning(false);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         });
         runThread.start();
@@ -641,5 +653,13 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
     public void setLaunchGame(boolean launchGame) {
         this.launchGame.set(launchGame);
+    }
+
+    public boolean isCloseClient() {
+        return closeClient.get();
+    }
+
+    public void setCloseClient(boolean closeClient) {
+        this.closeClient.set(closeClient);
     }
 }

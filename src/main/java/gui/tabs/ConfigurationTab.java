@@ -106,9 +106,12 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, Boolean> newMouseCol = new TableColumn<>("New Mouse");
         newMouseCol.setCellValueFactory(new PropertyValueFactory<>("newMouse"));
 
+        TableColumn<Configuration, Boolean> closeClientCol = new TableColumn<>("Close Client");
+        closeClientCol.setCellValueFactory(new PropertyValueFactory<>("closeClient"));
+
         getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, mirrorCol, launchGameCol, breakCol,
                 stopBreakCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol,
-                noRandomsCol, noInterfaceCol, noRenderCol, dismissRandomsCol, newMouseCol);
+                noRandomsCol, noInterfaceCol, noRenderCol, dismissRandomsCol, newMouseCol, closeClientCol);
 
         getTableView().setRowFactory(param -> {
 

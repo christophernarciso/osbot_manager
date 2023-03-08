@@ -38,6 +38,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
     private final CheckBox stopAfterBreak;
     private final CheckBox mirrorMode;
     private final CheckBox launchGame;
+    private final CheckBox closeClient;
 
     private final WorldSelectorDialog worldSelectorDialog;
 
@@ -131,6 +132,9 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         launchGame = new CheckBox("Launch Game");
         contentBox.getChildren().add(new FlowPane(10, 10, mirrorMode, launchGame));
 
+        closeClient = new CheckBox("Close Client After Script Stop");
+        contentBox.getChildren().add(new FlowPane(10,10, closeClient));
+
 
         selectedScripts.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
@@ -177,6 +181,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
             stopAfterBreak.setSelected(false);
             mirrorMode.setSelected(false);
             launchGame.setSelected(false);
+            closeClient.setSelected(false);
             return;
         }
         accountSelector.setValue(existingItem.getRunescapeAccount());
@@ -199,6 +204,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         stopAfterBreak.setSelected(existingItem.isStopAfterBreak());
         mirrorMode.setSelected(existingItem.isMirrorMode());
         launchGame.setSelected(existingItem.isLaunchGame());
+        closeClient.setSelected(existingItem.isCloseClient());
         okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
     }
 
@@ -229,6 +235,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         configuration.setStopAfterBreak(stopAfterBreak.isSelected());
         configuration.setMirrorMode(mirrorMode.isSelected());
         configuration.setLaunchGame(launchGame.isSelected());
+        configuration.setCloseClient(closeClient.isSelected());
 
         return configuration;
     }
@@ -264,6 +271,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         existingItem.setStopAfterBreak(stopAfterBreak.isSelected());
         existingItem.setMirrorMode(mirrorMode.isSelected());
         existingItem.setLaunchGame(launchGame.isSelected());
+        existingItem.setCloseClient(closeClient.isSelected());
 
         return existingItem;
     }
