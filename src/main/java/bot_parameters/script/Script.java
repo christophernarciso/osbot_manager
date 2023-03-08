@@ -26,6 +26,7 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
         this.scriptIdentifier = new SimpleStringProperty(scriptIdentifier);
         this.parameters = new SimpleStringProperty(parameters);
         this.isLocal = new SimpleBooleanProperty(isLocal);
+        this.nickname = new SimpleStringProperty();
     }
 
     public Script(final String scriptIdentifier, final String parameters, final boolean isLocal, final String nickname) {
